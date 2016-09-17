@@ -3,12 +3,6 @@
 #include <stdint.h>
 #include "../include/data.h"
 
-/*extern uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base);
-extern int32_t my_atoi(uint8_t * str);
-extern void dump_memory(uint8_t * start, uint32_t length);
-extern int32_t big_to_little(int32_t data);
-extern int32_t little_to_big(int32_t data);
-*/
 
 /*
 *This fucnction will return the number of characters needed to form the ascii string
