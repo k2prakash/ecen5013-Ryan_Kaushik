@@ -1,34 +1,37 @@
-#Including variable to gather source files
-#can also use -include or sinclude
+#VARIABLE DEFINITIONS
+INCDIR = include
+SRCDIR = src
+LIBDIR = lib
+BLDDIR = build
+OBJDIR = $(BLDDIR)/objects
+ASMDIR = $(BLDDIR)/assembly
+PPRDIR = $(BLDDIR)/preprocessor
 include sources.mk
+CC = gcc #gcc, arm-linux-gnueabihf.gcc, arm-linux-gnueabi.gcc, arm-none-eabi-gcc 
+CDEFS = cdefs
+COPT = -std=c99
+CFLAGS = -o  #-O0 -g
+LIBS = libs
+OUTPUT = $(BLDDIR)/project
 
 
-#VARIABLE DEFINITIONS - see chapter 6
-
-
-
-#DEFAULT GOAL - add auguments to specify a different default goal, see section 9.2
-#or with the .DEFAULT_GOAL special variable see section 6.14
-#use a :: to always remake
-project : $(OBJ)
-	gcc -o project $(OBJ)
+#DEFAULT GOAL
+project :
+	$(CC) $(SRC) $(CFLAGS) $(OUTPUT)
 	
 	
-#EXPLICIT RULES
+#RULES
+#main.o :
+#project1.o : project.c project1.h
+#	$(CC) $(CFLAGS)
+#memory.o : memory.h
+#data.o : data.h
 
 
-
-#IMPLICIT RULES - see chapter 10
-main.o :
-project1.o : project1.h
-memory.o : memory.h
-data.o : data.h
-
-
-#PHONY TARGETS - see sections 4.5 and 5.5
+#PHONY TARGETS
 .PHONY : clean
 clean :
-	rm project $(OBJ)
+	rm -f *.o *.d *.a /build
 
 
 
