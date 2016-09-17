@@ -1,44 +1,36 @@
 #VARIABLE DEFINITIONS
-INCDIR = include
-SRCDIR = src
-LIBDIR = lib
-BLDDIR = build
-OBJDIR = $(BLDDIR)/objects
-ASMDIR = $(BLDDIR)/assembly
-PPRDIR = $(BLDDIR)/preprocessor
-include sources.mk
-CC = gcc #gcc, arm-linux-gnueabihf.gcc, arm-linux-gnueabi.gcc, arm-none-eabi-gcc 
+CC = gcc#gcc, arm-linux-gnueabihf.gcc, arm-linux-gnueabi.gcc, arm-none-eabi-gcc 
+ARC = host#host, bbb, frdm
 CDEFS = cdefs
-COPT = -std=c99
-CFLAGS = -o  #-O0 -g
+CSTD = -std=c99
+CFLAGS = -o #-Wall, -g, -O0, architecture specific flags
 LIBS = libs
-OUTPUT = $(BLDDIR)/project
+
+
+#MAKEFILE INCLUDES
+include sources.mk
 
 
 #DEFAULT GOAL
 project :
-	mkdir -p $(BLDDIR)
-	$(CC) $(SRC) $(CFLAGS) $(OUTPUT)
-	./$(BLDDIR)/project
-	
-
-	
+	mkdir -p $(EXEDIR)
+	$(CC) $(SRC) $(CFLAGS) $(EXEDIR)/$(OUTPUT)	
+	./$(EXEDIR)/$(OUTPUT)
 	
 #RULES
-main.o :
-
-project1.o : project.c project1.h
-	$(CC) $(CFLAGS)
-memory.o : memory.h
-data.o : data.h
+#main.o :
+#
+#project1.o : project.c project1.h
+#	$(CC) $(CFLAGS)
+#memory.o : memory.h
+#data.o : data.h
 
 
 #PHONY TARGETS
 .PHONY : clean
 clean :
-	rm -f *.o *.d *.a
-	rm build/project
-	rmdir build
+	rm -f -r *.o *.d *.a build #cleans root and deletes build
+	find . -name "*.o" -type f -delete #cleans objs from src dir if any
 
 
 

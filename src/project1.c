@@ -3,7 +3,15 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include "../include/memory.h"
+#include "../include/data.h"
+#include "../include/project1.h"
 
+void project1()
+{
+	printf("Hello, World!");
+}
+
+/*
 extern int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length);
 extern int8_t my_memzero(uint8_t * src, uint32_t length);
 extern int8_t my_reverse(uint8_t * src, uint32_t length);
@@ -83,4 +91,4 @@ if(rc == 0) {
 
 return;
 
-}
+}*/
