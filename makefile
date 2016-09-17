@@ -17,21 +17,28 @@ OUTPUT = $(BLDDIR)/project
 
 #DEFAULT GOAL
 project :
+	mkdir -p $(BLDDIR)
 	$(CC) $(SRC) $(CFLAGS) $(OUTPUT)
+	./$(BLDDIR)/project
+	
+
 	
 	
 #RULES
-#main.o :
-#project1.o : project.c project1.h
-#	$(CC) $(CFLAGS)
-#memory.o : memory.h
-#data.o : data.h
+main.o :
+
+project1.o : project.c project1.h
+	$(CC) $(CFLAGS)
+memory.o : memory.h
+data.o : data.h
 
 
 #PHONY TARGETS
 .PHONY : clean
 clean :
-	rm -f *.o *.d *.a /build
+	rm -f *.o *.d *.a
+	rm build/project
+	rmdir build
 
 
 
