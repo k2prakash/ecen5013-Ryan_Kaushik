@@ -1,65 +1,57 @@
 #VARIABLE DEFINITIONS
-CC = gcc#gcc, arm-linux-gnueabihf.gcc, arm-linux-gnueabi.gcc, arm-none-eabi-gcc 
-ARC = host#host, bbb, frdm
-CDEFS = cdefs
-CSTD = -std=c99
-CFLAGS = -o #-Wall, -g, -O0, architecture specific flags
-LIBS = libs
+CC = gcc
+CDEFS =
+CFLAGS =
+PLFM = host
 
 
-#MAKEFILE INCLUDES
+#MAKEFILE INCLUDES (use -include to supress search warnings)
 include sources.mk
 
 
 #DEFAULT GOAL
-project :
-	mkdir -p $(EXEDIR)
-	$(CC) $(SRC) $(CFLAGS) $(EXEDIR)/$(OUTPUT)	
-	./$(EXEDIR)/$(OUTPUT)
-	
-#RULES
-#main.o :
-#
-#project1.o : project.c project1.h
-#	$(CC) $(CFLAGS)
-#memory.o : memory.h
-#data.o : data.h
+all : host bbb frdm
+.PHONY : all host bbb frdm
+
+PLFM = host
+host : project
+
+PLFM = bbb
+bbb : project
+
+PLFM = frdm
+frdm : project
+
+project : $(SRC)
+	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	$(CC) -c $(CFLAGS) $^ -o $(BINDIR)/project
+	./$(BINDIR)/$(OUTPUT)
 
 
 #PHONY TARGETS
-.PHONY : clean
+.PHONY : preprocess asm-file %.o compile-all build upload clean build-lib
+preprocess :
+	mkdir -p $(PPRDIR)
+	$(CC) -E $(SRC)
+asm-file :
+	mkdir -p $(ASMDIR)
+	$(CC) -S $(SRC)
+%.o :
+	mkdir -p $(OBJDIR)
+	$(CC) -c $(SRC)
+compile-all :
+	mkdir -p $(OBJDIR)
+	$(CC) -c $(SRC)
+build :
+	mkdir -p $(EXEDIR)
+	$(CC) $(SRC) -o $(EXEDIR)
+upload :
+	
 clean :
-	rm -f -r *.o *.d *.a build #cleans root and deletes build
+	rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
 	find . -name "*.o" -type f -delete #cleans objs from src dir if any
+build-lib :
+	mkdir -p $(LIBDIR)
+	$(CC) -shared $(SRC) $(LIBDIR)/libproject1.a
+.NORPARALLEL :
 
-
-
-
-
-#INCLUDE_DIRS =
-#LIB_DIRS =
-#CC=gcc
-
-#CDEFS=
-#CFLAGS= -O0 -g $(INCLUDE_DIRS) $(CDEFS)
-#LIBS=
-
-#HFILES=
-#CFILES= feasibility_tests.c
-
-#SRCS= ${HFILES} ${CFILES}
-#OBJS= ${CFILES:.c=.o}
-
-#all:    feasibility_tests
-
-#clean:
-#       -rm -f *.o *.d
-#       -rm -f feasibility_tests
-
-#feasibility_tests: feasibility_tests.o
-#       $(CC) $(LDFLAGS) $(CFLAGS) -o $@ $@.o -lm
-
-#depend:
-
-#.c.o:
-#       $(CC) $(CFLAGS) -c $<
