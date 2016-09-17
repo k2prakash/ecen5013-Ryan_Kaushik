@@ -1,8 +1,7 @@
 #include <stdio.h>
-<<<<<<< HEAD
 #include <stdlib.h>
 #include <stdint.h>
-#include "data.h"
+#include "../include/data.h"
 
 /*extern uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base);
 extern int32_t my_atoi(uint8_t * str);
@@ -155,6 +154,3 @@ int32_t little_to_big(int32_t data){
 }
 
 
-=======
-#include "../include/data.h"
->>>>>>> 7a0fc0e24d557b801271e15080d31c629670f16f
