@@ -1,7 +1,7 @@
-#include "../include/project1.h"
+#include "../include/project_1.h"
 
 int main()
 {
-    void project1();
+    project_1_report();
     return 0;
 }

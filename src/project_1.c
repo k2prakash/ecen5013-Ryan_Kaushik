@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include "../include/memory.h"
 #include "../include/data.h"
-#include "../include/project1.h"
+#include "../include/project_1.h"
 
-void project1()
+void project_1_report()
 {
-	printf("Hello, World!");
+    printf("Hello, World!\n");
+    return;
 }
 
 /*
