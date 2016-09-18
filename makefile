@@ -1,83 +1,82 @@
-#VARIABLE DEFINITIONS
-CFLAGS :=
-override frdmflag :=
-platform := host
+#VARIABLE DEFINITIONS (these act as compile time flags/swithches, defaults are given where appropriate)
 CC := gcc
+CFLAGS := -Wall -g
+target := host
 
-override run :=
 
-
-#TARGET SPECIFIC VARIABLES
+#TARGET SPECIFIC VARIABLES (these will be used by the compile time switches)
 ifeq ($(platform),bbb)
 CC := arm-linux-gnueabi-gcc
-platform := bbb
+include sources.mk
 else ifeq ($(platform),frdm)
 CC := arm-none-eabi-gcc
 override frdmflag := --specs=nosys.specs
-platform := frdm
+include sources.mk
 else
 CC := gcc
-platform := host
-override run := @./build/host/bin/project
+target := host
+include sources.mk
+override run := @./$(bpaths)
 endif
 
 
-#MAKEFILE INCLUDES (use -include to supress search warnings)
+#MAKEFILE INCLUDES (this file contains a list of files, directories and paths for the build system)
 include sources.mk
 
 
-#DEFAULT GOAL
-all: preprocess asm-file compile-all build
+#DEFAULT GOAL (just build an image for the specific target)
+all: preprocess asm-file compile-all build-lib build
 
 
-#PHONY TARGETS
-.PHONY :all asm-file compile-all build upload clean build-lib
-preprocess : | $(ppr)
-$(ppr) : $(src) | $(idir)
-	@$(CC) $< $(CFLAGS) -E -o $(idir)/$@
+#PHONY TARGETS (also list here are dependencies of these targets)
+.PHONY :all preprocess asm-file compile-all build upload clean build-lib
+preprocess : $(ifiles)
+$(ifiles) : $(cfiles) | $(idir)
+	@$(CC) $< -E -o $(idir)/$@
 $(idir) :
 	@mkdir -p $(idir)
-	echo "building preprocessed output"
+	@echo "building preprocessed output"
 
-
-asm-file : | $(asm)
-$(asm) : $(src) | $(sdir)
-	@$(CC) $< $(CFLAGS) -S -o $(sdir)/$@
+asm-file : $(sfiles)
+$(sfiles) : $(cfiles) | $(sdir)
+	@$(CC) $< -S -o $(sdir)/$@
 $(sdir) :
 	@mkdir -p $(sdir)
-	echo "building assembly output"
+	@echo "building assembly output"
 
-
-compile-all	: | $(obj)
-$(obj) : $(src) | $(odir)
-	@$(CC) $< $(CFLAGS) -c -o $(odir)/$@
+compile-all	: $(ofiles)
+$(ofiles) : $(cfiles) | $(odir)
+	@$(CC) $< -c -o $(odir)/$@
 $(odir) :
 	@mkdir -p $(odir)
-	echo "build object file output"
+	@echo "building object file output"
 
-
-build : $(src) | $(bdir)
-	@$(CC) $^ $(frdmflag) $(CFLAGS) -o $(bdir)/project
+build : $(bfiles)
+$(bfiles) : $(cfiles) | $(bdir)
+	@$(CC) $^ $(frdmflag) $(CFLAGS) -o $(bdir)/$@
+	@echo "executing native image file if it's created"
 	$(run)
 $(bdir) :
 	@mkdir -p $(bdir)
-	echo "building image file"
+	@echo "building image file"
 
-
-upload :
+upload : 
 	
 clean :
 	@rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
 	@find . -name "*.o" -type f -delete #cleans objs from src dir if any
 	@echo "cleaning up the build system"
 	
-build-lib : $(src) | $(libdir)
-	$(CC) -shared $(cfiles) -fpic -o $(libfiles)
-$(libdir) :
-	@mkdir -p $(libdir)
-	echo "build shared library"
+build-lib : $(afiles)
+$(afiles) : $(cfiles) | $(adir)
+	@$(CC) -shared $^ -fpic -o $(adir)/$@
+$(adir) :
+	@mkdir -p $(adir)
+	@echo "building shared library"
 
-	
+$(cfiles) : $(hfiles)
+
+#ADDITIONAL TARGETS
 .NORPARALLEL :
 .ONESHELL :
 
