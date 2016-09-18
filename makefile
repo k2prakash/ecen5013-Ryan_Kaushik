@@ -1,8 +1,6 @@
 #VARIABLE DEFINITIONS
 CFLAGS :=
-CC := gcc
-PLFM := host
-#target specific variables
+#TARGET SPECIFIC VARIABLES
 host : CC := gcc
 host : PLFM := host
 bbb : CC := arm-linux-gnueabi-gcc
@@ -15,8 +13,8 @@ frdm : PLFM := frdm
 include sources.mk
 
 
-#DEFAULT GOAL
-all : host bbb frdm preprocess asm-file
+#DEFAULT GOAL (only build host as default. To call another plateform just specify bbb or frdm)
+all: host
 .PHONY : all host bbb frdm
 
 host : $(src)
@@ -30,14 +28,14 @@ bbb : $(src)
 
 frdm : $(src)
 	mkdir -p $(BLDDIR)/$(PLFM)/bin
-	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
+	$(CC) $(CFLAGS) --specs=nosys.specs $^ -o $(BLDDIR)/$(PLFM)/bin/project
 
-
+	
 #PHONY TARGETS
 .PHONY : preprocess asm-file %.o compile-all build upload clean build-lib
 preprocess :
 	mkdir -p $(BLDDIR)/$(PLFM)/preprocess
-	@$(CC) -E $(SRC) output
+	$(CC) -E $(SRC) -o $(PPR)
 asm-file :
 	mkdir -p $(BLDDIR)/$(PLFM)/assembly
 	$(CC) -S $(SRC)

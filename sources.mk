@@ -8,7 +8,7 @@ SRCDIR := src
 BLDDIR := build
 OBJDIR := $(BLDDIR)/$(PLFM)/object
 ASMDIR := $(BLDDIR)/$(PLFM)/assembly
-PPRDIR := $(BLDDIR)/$(PLFM)/preprocessor
+PPRDIR := $(BLDDIR)/$(PLFM)/preprocess
 BINDIR := $(BLDDIR)/$(PLFM)/bin
 LIBDIR := $(BLDDIR)/$(PLFM)/lib
 #lists of includes, source and object files
@@ -16,7 +16,7 @@ inc := project_1.h memory.h data.h
 src := main.c $(inc:.h=.c)
 obj := $(src:.c=.o)
 asm := $(src:.c=.S)
-ppr := $(src:.c=.c)
+ppr := $(src:.c=.i)
 #similar to the above but also has the path appended
 INC := $(addprefix $(INCDIR)/, $(inc))
 SRC := $(addprefix $(SRCDIR)/, $(src))
