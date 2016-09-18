@@ -1,60 +1,80 @@
 #VARIABLE DEFINITIONS
 CFLAGS :=
+override FRDMFLAG :=
+PLATFORM := host
+CC := gcc
+override RUN :=
+
+
 #TARGET SPECIFIC VARIABLES
-host : CC := gcc
-host : PLFM := host
-bbb : CC := arm-linux-gnueabi-gcc
-bbb : PLFM := bbb
-frdm : CC := arm-none-eabi-gcc
-frdm : PLFM := frdm
+ifeq ($(PLATFORM),bbb)
+CC := arm-linux-gnueabi-gcc
+PLATFORM := bbb
+else ifeq ($(PLATFORM),frdm)
+CC := arm-none-eabi-gcc
+override FRDMFLAG := --specs=nosys.specs
+PLATFORM := frdm
+else
+CC := gcc
+PLATFORM := host
+override RUN := @./build/host/bin/project
+endif
 
 
 #MAKEFILE INCLUDES (use -include to supress search warnings)
 include sources.mk
 
 
-#DEFAULT GOAL (only build host as default. To call another plateform just specify bbb or frdm)
-all: host
-.PHONY : all host bbb frdm
+#CANNED RECIPES
+define makedir =
+@mkdir -p $(BLDDIR)/$(PLATFORM)/bin
+@mkdir -p $(BLDDIR)/$(PLATFORM)/object
+@mkdir -p $(BLDDIR)/$(PLATFORM)/asm
+@mkdir -p $(BLDDIR)/$(PLATFORM)/preprocced
+endef
 
-host : $(src)
-	@mkdir -p $(BLDDIR)/$(PLFM)/bin
-	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
-	@./$(BLDDIR)/$(PLFM)/bin/$(OUTPUT)
 
-bbb : $(src)
-	@mkdir -p $(BLDDIR)/$(PLFM)/bin
-	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
+#FUNCTIONS
+preprocess
 
-frdm : $(src)
-	@mkdir -p $(BLDDIR)/$(PLFM)/bin
-	$(CC) $(CFLAGS) --specs=nosys.specs $^ -o $(BLDDIR)/$(PLFM)/bin/project
+#DEFAULT GOAL
+all: build
 
-	
+
 #PHONY TARGETS
-.PHONY : preprocess asm-file %.o compile-all build upload clean build-lib
-preprocess :
-	@mkdir -p $(BLDDIR)/$(PLFM)/preprocess
-	$(CC) -E $(SRC) -o $(PPR)
+.PHONY :all preprocess asm-file %.o compile-all build upload clean build-lib
+preprocess : $(ppr)
+	$(makedir)
+	$(CC) -E $(src)
+	
 asm-file :
-	mkdir -p $(BLDDIR)/$(PLFM)/assembly
-	$(CC) -S $(SRC)
+	$(makedir)
+	$(CC) -S $(src)
+	
 %.o :
-	mkdir -p $(BLDDIR)/$(PLFM)/object
-	$(CC) -c $(SRC)
+	$(makedir)
+	$(CC) -c $(src)
+	
 compile-all :
-	mkdir -p $(OBJDIR)
-	$(CC) -c $(SRC)
-build :
-	mkdir -p $(EXEDIR)
-	$(CC) $(SRC) -o $(EXEDIR)
+	$(makedir)
+	$(CC) -c $(src)
+	
+build : $(src)
+	$(makedir)
+	$(CC) $(CFLAGS) $(FRDMFLAG) $^ -o $(BLDDIR)/$(PLATFORM)/bin/project
+	$(RUN)
+	
 upload :
 	
 clean :
 	rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
 	find . -name "*.o" -type f -delete #cleans objs from src dir if any
+	
 build-lib :
 	mkdir -p $(LIBDIR)
 	$(CC) -shared $(SRC) $(LIBDIR)/libproject1.a
+	
+
+	
 .NORPARALLEL :
 

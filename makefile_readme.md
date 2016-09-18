@@ -54,3 +54,23 @@ ADDITIONAL TARGETS
 
 The build system also include additonal targets that can be called
 just like the main targets.
+
+
++++++++++++++++++++++++
+COMMAND LINE AURGUMENTS
++++++++++++++++++++++++
+
+To change the default goal just enter one of the follow aurguments
+at the command line.
+
+Auguments to specific the default goal
+	1. preprocess
+	2. asm-file
+	3. %.o
+	4. compile-all
+	5. build
+	6. upload
+	7. clean
+	8. build-lib
+	
+
