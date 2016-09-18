@@ -18,23 +18,23 @@ all: host
 .PHONY : all host bbb frdm
 
 host : $(src)
-	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	@mkdir -p $(BLDDIR)/$(PLFM)/bin
 	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
-	./$(BLDDIR)/$(PLFM)/bin/$(OUTPUT)
+	@./$(BLDDIR)/$(PLFM)/bin/$(OUTPUT)
 
 bbb : $(src)
-	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	@mkdir -p $(BLDDIR)/$(PLFM)/bin
 	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
 
 frdm : $(src)
-	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	@mkdir -p $(BLDDIR)/$(PLFM)/bin
 	$(CC) $(CFLAGS) --specs=nosys.specs $^ -o $(BLDDIR)/$(PLFM)/bin/project
 
 	
 #PHONY TARGETS
 .PHONY : preprocess asm-file %.o compile-all build upload clean build-lib
 preprocess :
-	mkdir -p $(BLDDIR)/$(PLFM)/preprocess
+	@mkdir -p $(BLDDIR)/$(PLFM)/preprocess
 	$(CC) -E $(SRC) -o $(PPR)
 asm-file :
 	mkdir -p $(BLDDIR)/$(PLFM)/assembly
