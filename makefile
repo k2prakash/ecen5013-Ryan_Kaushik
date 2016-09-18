@@ -5,10 +5,10 @@ target := host
 
 
 #TARGET SPECIFIC VARIABLES (these will be used by the compile time switches)
-ifeq ($(platform),bbb)
+ifeq ($(target),bbb)
 CC := arm-linux-gnueabi-gcc
 include sources.mk
-else ifeq ($(platform),frdm)
+else ifeq ($(target),frdm)
 CC := arm-none-eabi-gcc
 override frdmflag := --specs=nosys.specs
 include sources.mk
@@ -32,30 +32,29 @@ all: preprocess asm-file compile-all build-lib build
 .PHONY :all preprocess asm-file compile-all build upload clean build-lib
 preprocess : $(ifiles)
 $(ifiles) : $(cfiles) | $(idir)
-	@$(CC) $< -E -o $(idir)/$@
+	$(CC) $< $(CFLAGS) -E -o $(idir)/$@
 $(idir) :
 	@mkdir -p $(idir)
 	@echo "building preprocessed output"
 
 asm-file : $(sfiles)
 $(sfiles) : $(cfiles) | $(sdir)
-	@$(CC) $< -S -o $(sdir)/$@
+	$(CC) $< $(CFLAGS) -S -o $(sdir)/$@
 $(sdir) :
 	@mkdir -p $(sdir)
 	@echo "building assembly output"
 
 compile-all	: $(ofiles)
 $(ofiles) : $(cfiles) | $(odir)
-	@$(CC) $< -c -o $(odir)/$@
+	$(CC) $< $(CFLAGS) -c -o $(odir)/$@
 $(odir) :
 	@mkdir -p $(odir)
 	@echo "building object file output"
 
 build : $(bfiles)
 $(bfiles) : $(cfiles) | $(bdir)
-	@$(CC) $^ $(frdmflag) $(CFLAGS) -o $(bdir)/$@
-	@echo "executing native image file if it's created"
-	$(run)
+	$(CC) $^ $(frdmflag) $(CFLAGS) -o $(bdir)/$@
+	@$(run)
 $(bdir) :
 	@mkdir -p $(bdir)
 	@echo "building image file"
@@ -69,14 +68,10 @@ clean :
 	
 build-lib : $(afiles)
 $(afiles) : $(cfiles) | $(adir)
-	@$(CC) -shared $^ -fpic -o $(adir)/$@
+	$(CC) -shared $^ $(CFLAGS) -fpic -o $(adir)/$@
 $(adir) :
 	@mkdir -p $(adir)
 	@echo "building shared library"
 
 $(cfiles) : $(hfiles)
-
-#ADDITIONAL TARGETS
-.NORPARALLEL :
-.ONESHELL :
 
