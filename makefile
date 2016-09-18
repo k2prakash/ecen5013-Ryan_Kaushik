@@ -71,10 +71,11 @@ clean :
 	@find . -name "*.o" -type f -delete #cleans objs from src dir if any
 	@echo "cleaning up the build system"
 	
-build-lib :
-	mkdir -p $(LIBDIR)
-	$(CC) -shared $(SRC) $(LIBDIR)/libproject1.a
-	
+build-lib : $(src) | $(libdir)
+	$(CC) -shared $(cfiles) -fpic -o $(libfiles)
+$(libdir) :
+	@mkdir -p $(libdir)
+	echo "build shared library"
 
 	
 .NORPARALLEL :
