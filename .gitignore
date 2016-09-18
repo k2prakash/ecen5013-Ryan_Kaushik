@@ -1,9 +1,9 @@
-#*.[oaiSd]
-#*.a
-#*.o
-#*.i
-#*.S
-#*.d
-#*.maps
-#*.out
+*.[oaiSd]
+*.a
+*.o
+*.i
+*.S
+*.d
+*.maps
+*.out
 build/
