@@ -1,6 +1,7 @@
 #VARIABLE DEFINITIONS (these act as compile time flags/swithches, defaults are given where appropriate)
 CC := gcc
-CFLAGS := -Wall -g
+CSTD := -std=c99
+CFLAGS := -Wall -g -O0
 target := host
 
 
@@ -32,28 +33,28 @@ all: preprocess asm-file compile-all build-lib build
 .PHONY :all preprocess asm-file compile-all build upload clean build-lib
 preprocess : $(ifiles)
 $(ifiles) : $(cfiles) | $(idir)
-	$(CC) $< $(CFLAGS) -E -o $(idir)/$@
+	$(CC) $< $(CSTD) $(CFLAGS) -E -o $(idir)/$@
 $(idir) :
 	@mkdir -p $(idir)
 	@echo "building preprocessed output"
 
 asm-file : $(sfiles)
 $(sfiles) : $(cfiles) | $(sdir)
-	$(CC) $< $(CFLAGS) -S -o $(sdir)/$@
+	$(CC) $< $(CSTD) $(CFLAGS) -S -o $(sdir)/$@
 $(sdir) :
 	@mkdir -p $(sdir)
 	@echo "building assembly output"
 
 compile-all	: $(ofiles)
 $(ofiles) : $(cfiles) | $(odir)
-	$(CC) $< $(CFLAGS) -c -o $(odir)/$@
+	$(CC) $< $(CSTD) $(CFLAGS) -c -o $(odir)/$@
 $(odir) :
 	@mkdir -p $(odir)
 	@echo "building object file output"
 
 build : $(bfiles)
 $(bfiles) : $(cfiles) | $(bdir)
-	$(CC) $^ $(frdmflag) $(CFLAGS) -o $(bdir)/$@
+	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/$@
 	@$(run)
 $(bdir) :
 	@mkdir -p $(bdir)
@@ -68,7 +69,7 @@ clean :
 	
 build-lib : $(afiles)
 $(afiles) : $(cfiles) | $(adir)
-	$(CC) -shared $^ $(CFLAGS) -fpic -o $(adir)/$@
+	$(CC) -shared $^ $(CSTD) $(CFLAGS) -fpic -o $(adir)/$@
 $(adir) :
 	@mkdir -p $(adir)
 	@echo "building shared library"

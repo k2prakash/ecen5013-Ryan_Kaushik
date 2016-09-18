@@ -33,5 +33,3 @@ opaths := $(addprefix $(odir)/,$(ofiles))
 spaths := $(addprefix $(sdir)/,$(sfiles))
 ipaths := $(addprefix $(idir)/,$(ifiles))
 apaths := $(addprefix $(adir)/,$(afiles))
-
-
