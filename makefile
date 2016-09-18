@@ -3,9 +3,8 @@ CFLAGS :=
 override frdmflag :=
 platform := host
 CC := gcc
-
 override run :=
-
+BBB_IP :=10.38.47.143
 
 #TARGET SPECIFIC VARIABLES
 ifeq ($(platform),bbb)
@@ -65,6 +64,7 @@ $(bdir) :
 
 
 upload :
+	@./scp_remote.sh $(BBB_IP)
 	
 clean :
 	@rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
