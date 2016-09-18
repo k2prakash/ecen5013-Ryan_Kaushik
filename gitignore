@@ -1,2 +1,4 @@
-*.[oaiS]    #ignore object and assembly files
+*.[oaiSd]    #ignore object and assembly files
 build/    #ignore the entire contents of the build directory
+.maps
+.out
