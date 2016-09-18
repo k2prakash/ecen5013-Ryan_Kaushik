@@ -1,8 +1,14 @@
 #VARIABLE DEFINITIONS
-CC = gcc
-CDEFS =
-CFLAGS =
-PLFM = host
+CFLAGS :=
+CC := gcc
+PLFM := host
+#target specific variables
+host : CC := gcc
+host : PLFM := host
+bbb : CC := arm-linux-gnueabi-gcc
+bbb : PLFM := bbb
+frdm : CC := arm-none-eabi-gcc
+frdm : PLFM := frdm
 
 
 #MAKEFILE INCLUDES (use -include to supress search warnings)
@@ -10,34 +16,33 @@ include sources.mk
 
 
 #DEFAULT GOAL
-all : host bbb frdm
+all : host bbb frdm preprocess asm-file
 .PHONY : all host bbb frdm
 
-PLFM = host
-host : project
-
-PLFM = bbb
-bbb : project
-
-PLFM = frdm
-frdm : project
-
-project : $(SRC)
+host : $(src)
 	mkdir -p $(BLDDIR)/$(PLFM)/bin
-	$(CC) -c $(CFLAGS) $^ -o $(BINDIR)/project
-	./$(BINDIR)/$(OUTPUT)
+	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
+	./$(BLDDIR)/$(PLFM)/bin/$(OUTPUT)
+
+bbb : $(src)
+	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
+
+frdm : $(src)
+	mkdir -p $(BLDDIR)/$(PLFM)/bin
+	$(CC) $(CFLAGS) $^ -o $(BLDDIR)/$(PLFM)/bin/project
 
 
 #PHONY TARGETS
 .PHONY : preprocess asm-file %.o compile-all build upload clean build-lib
 preprocess :
-	mkdir -p $(PPRDIR)
-	$(CC) -E $(SRC)
+	mkdir -p $(BLDDIR)/$(PLFM)/preprocess
+	@$(CC) -E $(SRC) output
 asm-file :
-	mkdir -p $(ASMDIR)
+	mkdir -p $(BLDDIR)/$(PLFM)/assembly
 	$(CC) -S $(SRC)
 %.o :
-	mkdir -p $(OBJDIR)
+	mkdir -p $(BLDDIR)/$(PLFM)/object
 	$(CC) -c $(SRC)
 compile-all :
 	mkdir -p $(OBJDIR)

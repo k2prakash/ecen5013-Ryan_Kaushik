@@ -1,20 +1,27 @@
 #VARIABLE DEFINITIONS
 
 #source and includes
-VPATH = src include
-INCDIR = include
-SRCDIR = src
+VPATH := src include
+INCDIR := include
+SRCDIR := src
 #build outputs
-BLDDIR = build
-OBJDIR = $(BLDDIR)/$(PLFM)/object
-ASMDIR = $(BLDDIR)/$(PLFM)/assembly
-PPRDIR = $(BLDDIR)/$(PLFM)/preprocessor
-BINDIR = $(BLDDIR)/$(PLFM)/bin
-LIBDIR = $(BLDDIR)/$(PLFM)/lib
+BLDDIR := build
+OBJDIR := $(BLDDIR)/$(PLFM)/object
+ASMDIR := $(BLDDIR)/$(PLFM)/assembly
+PPRDIR := $(BLDDIR)/$(PLFM)/preprocessor
+BINDIR := $(BLDDIR)/$(PLFM)/bin
+LIBDIR := $(BLDDIR)/$(PLFM)/lib
 #lists of includes, source and object files
-INC = $(addprefix $(INCDIR)/, project1.h memory.h data.h)
-SRC = $(addprefix $(SRCDIR)/, main.c project_1.c memory.c data.c)
-OBJ = $(addprefix $(OBJDIR)/, main.o project_1.o memory.o data.o)
-ASM = $(addprefix $(ASMDIR)/, main.a project_1.S memory.S data.S)
-PPR = $(addprefix $(PPRDIR)/, main.c project_1.c memory.c data.c)
-OUTPUT = project
+inc := project_1.h memory.h data.h
+src := main.c $(inc:.h=.c)
+obj := $(src:.c=.o)
+asm := $(src:.c=.S)
+ppr := $(src:.c=.c)
+#similar to the above but also has the path appended
+INC := $(addprefix $(INCDIR)/, $(inc))
+SRC := $(addprefix $(SRCDIR)/, $(src))
+OBJ := $(addprefix $(OBJDIR)/, $(obj))
+ASM := $(addprefix $(ASMDIR)/, $(asm))
+PPR := $(addprefix $(PPRDIR)/, $(ppr))
+#the  final output file name
+OUTPUT := project
