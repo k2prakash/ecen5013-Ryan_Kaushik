@@ -4,7 +4,7 @@
 #include "../include/data.h"
 
 #ifdef FRDM
-#define printf(...) (0)
+#define printf(...)
 #endif
 
 /*
@@ -101,10 +101,10 @@ void dump_memory(uint8_t * start, uint32_t length){
         if ((pr % 16) == 0 ) {   // if the count is a factor of 16, then go to the next line.
             printf("\n");
             printf("%p", start); // print the address of the current pointer
-            printf("\t0x%x", *start); // print the value at the pointer
+            printf("\t 0x%x", *start); // print the value at the pointer
         }
         else {
-           printf("\t0x%x", *start); // print the value at the pointer.
+           printf("\t 0x%x", *start); // print the value at the pointer.
         }
 
         start++; // Keep incrementing the pointer till the end of length

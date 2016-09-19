@@ -3,7 +3,7 @@
 #include "../include/memory.h"
 
 #ifdef FRDM
-#define printf(...) (0)
+#define printf(...)
 #endif
 
 /*
