@@ -2,6 +2,10 @@
 #include <stdint.h>
 #include "../include/memory.h"
 
+#ifdef FRDM
+#define printf(...) (0)
+#endif
+
 /*
 This function will move byte(s) of data starting from the source address location to the desitination address location.
 */
@@ -11,13 +15,6 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length) {
             return NULL_PTR_ERROR;
     }
 
-    // commented becasue the uimt32_t type takes care of negative numbers. Negative numbers will always be considered as large numbers
-    /*if ((length >> 31) == 1) { // Check to see if the length is less than o
-    if (length <= 0 ) { // Check to see if the length is less than or equal to 0
-        fprintf(stderr, "Invalid length encountered. Exit code: %d\n", INVAL_LEN_ERROR);
-        return INVAL_LEN_ERROR;
-    }
-    */
     if (  ((dst > src) && ((dst - (src + length -1)) <= 0)) || // Check to see if dst is at least one greater than src + length -1.
 		((src > dst) && (( src - (dst + length -1)) <= 0 )) || // Check to see if src is at least one greater than dst + length -1.
 			(dst == src)) { // Check to see if the addresses pointed by src and dev are the same.
@@ -26,7 +23,7 @@ int8_t my_memmove(uint8_t * src, uint8_t * dst, uint32_t length) {
     }
 
     while (length > 0) { // Copy the contents of address pointed by src pointer into the address pointed by dst pointer. 
-	*dst++ = *src++; // Increment the addresses of the pointers till the length is greater than 0.
+	*dst++ = *src++; // Increment the addresses of the pointers till the length is equal to 0.
         length--;
     }
     return SUCCESS;
@@ -41,12 +38,6 @@ int8_t my_memzero(uint8_t * src, uint32_t length) {
         fprintf(stderr, "Null pointer encountered. Exit code: %d\n", NULL_PTR_ERROR);// Display Null pointer error message.
         return NULL_PTR_ERROR;
     }
-
-    // commented becasue the uint32_t type takes care of negative numbers. Negative numbers will always be considered as large numbers
-    /*if (length <=0 ) { //Check to see if the length is less than or equal to 0
-        fprintf(stderr, "Invalid length encountered. Exit code: %d\n", INVAL_LEN_ERROR); //Display address overlap error message.
-        return INVAL_LEN_ERROR;
-    }*/
 
     while (length > 0) { // Derefernce the value pointed by the pointer src and set it to 0.
         *src++ = 0; // increment the addresses till length is greater than 0.
@@ -68,13 +59,6 @@ int8_t my_reverse(uint8_t * src, uint32_t length) {
         fprintf(stderr, "Null pointer encountered. Exit code: %d\n", NULL_PTR_ERROR);// Display Null pointer error message.
         return NULL_PTR_ERROR;
     }
-
-    /*
-    if (length <=0 ) { //Check to see if the length is less than or equal to 0
-        fprintf(stderr, "Invalid length encountered. Exit code: %d\n", INVAL_LEN_ERROR); //Display address overlap error message.
-        return INVAL_LEN_ERROR;
-    }
-    */
 
     while (c != l/2) {
         tmp = *(src + c);

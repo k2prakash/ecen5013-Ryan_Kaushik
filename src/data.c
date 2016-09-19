@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include "../include/data.h"
 
+#ifdef FRDM
+#define printf(...) (0)
+#endif
 
 /*
 *This fucnction will return the number of characters needed to form the ascii string
