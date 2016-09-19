@@ -1,10 +1,10 @@
 #VARIABLE DEFINITIONS (these act as compile time flags/swithches, defaults are given where appropriate)
 CC := gcc
 CSTD := -std=c99
-CFLAGS := -Wall -g -O0
+CFLAGS := -Wall -g -O0 
 target := host
 BBB_IP :=10.38.47.143
-MACRO := FRDM
+
 
 #TARGET SPECIFIC VARIABLES
 ifeq ($(platform),bbb)
@@ -19,6 +19,7 @@ CC := arm-linux-gnueabi-gcc
 include sources.mk
 else ifeq ($(target),frdm)
 CC := arm-none-eabi-gcc
+CFLAGS := -Wall -g -O0 -D FRDM 
 override frdmflag := --specs=nosys.specs
 include sources.mk
 else
@@ -61,7 +62,7 @@ $(odir) :
 
 build : $(bfiles)
 $(bfiles) : $(cfiles) | $(bdir)
-	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/$@ -D $(MACRO)
+	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/$@ 
 	@$(run)
 $(bdir) :
 	@mkdir -p $(bdir)
