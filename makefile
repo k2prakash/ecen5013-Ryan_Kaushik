@@ -78,7 +78,7 @@ clean :
 	@rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
 	@find . -name "*.o" -type f -delete #cleans objs from src dir if any
 	@echo "cleaning up the build system"
-	
+
 build-lib : $(afiles)
 $(afiles) : $(cfiles) | $(adir)
 	$(CC) -shared $^ $(CSTD) $(CFLAGS) -fpic -o $(adir)/$@
@@ -87,4 +87,6 @@ $(adir) :
 	@echo "building shared library"
 
 $(cfiles) : $(hfiles)
+
+
 
