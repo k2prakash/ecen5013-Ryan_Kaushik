@@ -4,6 +4,7 @@ CSTD := -std=c99
 CFLAGS := -Wall -g -O0
 target := host
 BBB_IP :=10.38.47.143
+MACRO := FRDM
 
 #TARGET SPECIFIC VARIABLES
 ifeq ($(platform),bbb)
@@ -60,7 +61,7 @@ $(odir) :
 
 build : $(bfiles)
 $(bfiles) : $(cfiles) | $(bdir)
-	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/$@
+	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/$@ -D $(MACRO)
 	@$(run)
 $(bdir) :
 	@mkdir -p $(bdir)
