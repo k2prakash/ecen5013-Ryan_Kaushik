@@ -27,10 +27,10 @@ void project_1_report()
     dump_memory(ptr1, 16);
 
     printf("\nContents of pointer PTR3 before Zeroizing the values\n\n");
-    dump_memory(ptr3, 15);
-    my_memzero(ptr3, 15);
+    dump_memory(ptr3, 16);
+    my_memzero(ptr3, 16);
     printf("\nContents of pointer PTR3 after Zeroizing the values\n\n");
-    dump_memory(ptr3, 15);
+    dump_memory(ptr3, 16);
 
     printf("\nMoving 8 bytes of data from APTR1 to APTR3...\n\n");
     my_memmove(ptr1, ptr3, 8);
@@ -50,7 +50,7 @@ void project_1_report()
     my_reverse(ptr1, 32);
     dump_memory(ptr1, 32);
 
-
+    printf("\nThe decoded mesasge is %s\n",array);
 
 
     //printf("Hello, World!\n");
