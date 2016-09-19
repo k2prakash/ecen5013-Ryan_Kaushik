@@ -15,7 +15,7 @@ endif
 
 #TARGET SPECIFIC VARIABLES (these will be used by the compile time switches)
 ifeq ($(target),bbb)
-CC := arm-linux-gnueabi
+CC := arm-linux-gnueabi-gcc
 include sources.mk
 else ifeq ($(target),bbb_ubnt)
 CC := arm-linux-gnueabihf-gcc-5
