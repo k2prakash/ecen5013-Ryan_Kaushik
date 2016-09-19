@@ -40,7 +40,7 @@ int8_t my_memzero(uint8_t * src, uint32_t length) {
     }
 
     while (length > 0) { // Derefernce the value pointed by the pointer src and set it to 0.
-        *src++ = 0; // increment the addresses till length is greater than 0.
+        *src++ = '0'; // increment the addresses till length is greater than 0.
         length--;
     }
     return SUCCESS;

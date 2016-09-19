@@ -17,6 +17,9 @@ endif
 ifeq ($(target),bbb)
 CC := arm-linux-gnueabi-gcc
 include sources.mk
+else ifeq ($(target),bbb_ubnt)
+CC := arm-linux-gnueabihf-gcc-5
+include sources.mk
 else ifeq ($(target),frdm)
 CC := arm-none-eabi-gcc
 CFLAGS := -Wall -g -O0 -D FRDM 
@@ -75,7 +78,7 @@ clean :
 	@rm -f -r *.o *.d *.a *.S *.map *.out *.i build #cleans root and deletes build
 	@find . -name "*.o" -type f -delete #cleans objs from src dir if any
 	@echo "cleaning up the build system"
-	
+
 build-lib : $(afiles)
 $(afiles) : $(cfiles) | $(adir)
 	$(CC) -shared $^ $(CSTD) $(CFLAGS) -fpic -o $(adir)/$@
@@ -84,4 +87,6 @@ $(adir) :
 	@echo "building shared library"
 
 $(cfiles) : $(hfiles)
+
+
 
