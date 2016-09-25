@@ -4,6 +4,7 @@
 *.i
 *.S
 *.d
+*.p
 *.maps
 *.out
 build/
