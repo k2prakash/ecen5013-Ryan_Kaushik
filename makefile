@@ -22,6 +22,7 @@ CC := gcc
 target := host
 endif
 
+
 #MAKEFILE INCLUDES (this file contains a list of files, directories and paths for the build system)
 include sources.mk
 
@@ -34,71 +35,62 @@ all: preprocess asm-file compile-all build-lib build image-size image-dump
 .PHONY :all preprocess asm-file compile-all build upload clean build-lib image-run image-size image-dump
 
 
+#PARENT TARGETS
 preprocess : $(ifiles)
+asm-file : $(sfiles)
+compile-all	: $(ofiles)
+build-lib : $(afiles)
+build : $(bfiles)
+
+
+#IMPLICIT AND DEPENDENT TARGETS
 %.i : %.c | $(idir)
 	@echo "building preprocessed output $|/$@"
 	@$(CC) $(cdir)/$*.c $(CSTD) $(CFLAGS) -E -o $|/$@
-$(idir) :
-	@mkdir -p $(idir)
-
-
-asm-file : $(sfiles)
 %.S : %.c | $(sdir)
 	@echo "building assembly output $|/$@"
 	@$(CC) $(cdir)/$*.c $(CSTD) $(CFLAGS) -S -o $|/$@
-$(sdir) :
-	@mkdir -p $(sdir)
-
-
-compile-all	: $(ofiles)
 %.o : %.c | $(odir)
 	@echo "building object file output $|/$@"
 	@$(CC) $(cdir)/$*.c $(CSTD) $(CFLAGS) -c -o $|/$@
-$(odir) :
-	@mkdir -p $(odir)
-
-
-build : $(bfiles)
 $(bfiles) : $(cfiles) | $(bdir)
 	@echo "building image file $|/$@"
 	@$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $|/$@
-	@echo "\n\n"
+$(afiles) : $(cfiles) | $(adir)
+	@echo "building shared library $|/$@"
+	@$(CC) -shared $^ $(CSTD) $(CFLAGS) -fpic -o $|/$@
+
+
+#DIRECTORY TARGETS
+$(idir) :
+	@mkdir -p $(idir)
+$(sdir) :
+	@mkdir -p $(sdir)
+$(odir) :
+	@mkdir -p $(odir)
+$(adir) :
+	@mkdir -p $(adir)
 $(bdir) :
 	@mkdir -p $(bdir)
 
 
+#OTHER TARGETS
 upload :  $(bfiles)
 	@echo "scp into $(BBB_IP)";
 	scp -r $(bdir) $(BBB_USER_NAME)@$(BBB_IP):$(BBB_OUTPUT_PATH)
-	
+image-run : $(bfiles)
+	@echo "running image file $(bpaths)"
+	@./$(bpaths)
+image-size : $(bfiles)
+	@echo "sizing image file $(bpaths)"
+	@size $(bpaths)
+image-dump : $(bfiles)
+	@echo "objdump of image file $(bpaths)"
+	@objdump $(DFLAGS) $(bpaths)
 
+
+#CLEANING TARGETS
 clean :
 	@rm -f -r *.o *.d *.a *.S *.map *.out *.i *.p build #cleans root and deletes build
 	@find . -name "*.o" -type f -delete #cleans objs from src dir if any
 	@echo "cleaning up the build system"
-	
-	
-image-run : $(bfiles)
-	@echo "running image file $(bpaths)\n"
-	@./$(bpaths)
-	@echo "\n"
-	
-	
-image-size : $(bfiles)
-	@echo "sizing image file $(bpaths)\n"
-	@size $(bpaths)
-	@echo "\n\n"
-
-
-image-dump : $(bfiles)
-	@echo "objdump of image file $(bpaths)\n"
-	@objdump $(DFLAGS) $(bpaths)
-	@echo "\n"
-
-build-lib : $(afiles)
-$(afiles) : $(cfiles) | $(adir)
-	@echo "building shared library $|/$@"
-	@$(CC) -shared $^ $(CSTD) $(CFLAGS) -fpic -o $|/$@
-$(adir) :
-	@mkdir -p $(adir)
-
