@@ -21,6 +21,7 @@ int8_t my_memmove(uint8_t* src , uint8_t* dst , uint32_t length)
         {
             *--dst = *--src;
         }
+    }
     else
     {
         for ( ; 0 < length ; --length )
@@ -60,7 +61,8 @@ int8_t my_reverse(uint8_t * src, uint32_t length)
         return NULL_PTR_ERROR;
     }
 
-    for ( uint8_t* end = src + length , uint8_t tmp ; 0 < length/2 ; --length )
+    uint8_t tmp;
+    for ( uint8_t* end = src + length ; 0 < length/2 ; --length )
     {
         tmp = *--end;
         *end = *src;
