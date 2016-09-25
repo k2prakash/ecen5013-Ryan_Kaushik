@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "../include/data.h"
+#include "../include/memory.h"
 
 #ifdef FRDM
 #define printf(...)
 #endif
 
-/*
-*This fucnction will return the number of characters needed to form the ascii string
-*/
+/*This fucnction will return the number of characters needed to form the ascii string*/
 uint32_t number_of_bytes(uint32_t data, int32_t base) {
     uint32_t  count = 1;
     while((data/base) > 0) {
@@ -18,6 +17,7 @@ uint32_t number_of_bytes(uint32_t data, int32_t base) {
     }
     return count;
 }
+
 
 /*
 * This function takes an integer value and converts it into an ascii equivalent value.
@@ -44,6 +44,7 @@ uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base){
     }
     return str;
 }
+
 
 /*
 * This funtion takes an ascii string and converts it into an equivalent 32bit integer value.
@@ -84,9 +85,8 @@ int32_t my_atoi(uint8_t * str){
     return (value * sign);
 }
 
-/*
-* This function will output a Hex dump of the contents of contiguous address space for a user specified length.
-*/
+
+/*This function will output a Hex dump of the contents of contiguous address space for a user specified length.*/
 void dump_memory(uint8_t * start, uint32_t length){
 
     uint32_t count = 0;
@@ -115,39 +115,24 @@ void dump_memory(uint8_t * start, uint32_t length){
     return;
 }
 
-/*
-* This fucntion will convert a word of 32 bits stored in the Big Endian format and convert 
-* it to the Litte Endian format.
-* In the conversion, the Least Significant Byte will be at the least address 
-* and the Most Siginicant Byte will be at the biggest address.
-*/
-int32_t big_to_little(int32_t data){ 
 
-    int32_t val = 0;
-    uint8_t *ptr;
-    ptr = (uint8_t *) &data; // Get the pointer of the first byte.
-    // in big to little Endian, the least significant byte at the highest address must be converted 
-    // to the least significant byte at the lowest address.
-    val = *(ptr+3) + (*(ptr+2)<<8) + (*(ptr+1)<<16) + (*(ptr)<<24);
-    return val; 
+/*This function swaps the byte order of a big endian stored value, making it a little endian stored value*/
+int32_t big_to_little( int32_t data )
+{
+    uint8_t* src = ( uint8_t* ) &data;
+    uint32_t length = sizeof( int32_t );
+    my_reverse(uint8_t* src , length);
+    /*int32_t val = *( ptr + 3 ) + ( *( ptr + 2 ) << 8 ) + ( *( ptr + 1 ) << 16 ) + ( *( ptr ) << 24 );*/
+    return data; 
 }
 
-/*
-* This fucntion will convert a word of 32 bits stored in the Little Endian format and convert 
-* it to the Big Endian format.
-* In the conversion, the Least Significant Byte will be at the highest address 
-* and the Most Siginicant Byte will be at the lowest address.
-*/
-int32_t little_to_big(int32_t data){
 
-    int32_t val = 0;
-    uint8_t *ptr;
-    ptr = (uint8_t *) &data; // Get the pointer of the first byte
-    // in little to big Endian, the least significant byte at the lowest adress must be converted 
-    // to the least significant byte at the highest address
+/*This function swaps the byte order of a little endian stored value, , making it a big endian stored value*/
+int32_t little_to_big(int32_t data)
+{
+    uint8_t* src = ( uint8_t* ) &data;
+    uint32_t length = sizeof( int32_t );
+    my_reverse(uint8_t* src , length);
     val =  (*(ptr)<<24) + (*(ptr+1)<<16) + (*(ptr+2)<<8) + *(ptr+3);
-    return val;
-
+    return data;
 }
-
-
