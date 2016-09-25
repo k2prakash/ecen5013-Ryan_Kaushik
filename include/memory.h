@@ -20,7 +20,7 @@ int8_t my_memzero(uint8_t * src, uint32_t length);
 This fucntion will takes a pointer to a memory location and a length in bytes and reverse the order of all of the bytes.
 */
 
-int8_t my_reverse(uint8_t * src, uint32_t length);
+int8_t my_reverse(uint8_t* src, uint32_t length);
 
 uint32_t srclen(uint8_t *src);
 #endif

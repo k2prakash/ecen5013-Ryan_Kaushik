@@ -121,7 +121,7 @@ int32_t big_to_little( int32_t data )
 {
     uint8_t* src = ( uint8_t* ) &data;
     uint32_t length = sizeof( int32_t );
-    my_reverse(uint8_t* src , length);
+    my_reverse( src , length);
     /*int32_t val = *( ptr + 3 ) + ( *( ptr + 2 ) << 8 ) + ( *( ptr + 1 ) << 16 ) + ( *( ptr ) << 24 );*/
     return data; 
 }
@@ -132,7 +132,7 @@ int32_t little_to_big(int32_t data)
 {
     uint8_t* src = ( uint8_t* ) &data;
     uint32_t length = sizeof( int32_t );
-    my_reverse(uint8_t* src , length);
-    val =  (*(ptr)<<24) + (*(ptr+1)<<16) + (*(ptr+2)<<8) + *(ptr+3);
+    my_reverse( src , length);
+    /*val =  (*(ptr)<<24) + (*(ptr+1)<<16) + (*(ptr+2)<<8) + *(ptr+3);*/
     return data;
 }

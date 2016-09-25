@@ -53,7 +53,7 @@ int8_t my_memzero(uint8_t* src, uint32_t length)
 
 
 /*This function reverses the byte order of length bytes starting at the src pointer address*/
-int8_t my_reverse(uint8_t * src, uint32_t length)
+int8_t my_reverse(uint8_t* src, uint32_t length)
 {
     if ( !src )
     {
