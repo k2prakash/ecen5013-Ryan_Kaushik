@@ -16,8 +16,8 @@ VPATH := $(hdir) $(cdir) $(bdir) $(odir) $(sdir) $(adir) $(idir)
 
 
 #list file name (file name does not include the file directory), only have one bfiles
-hfiles := project_1.h memory.h data.h
-cfiles := main.c project_1.c memory.c data.c
+hfiles := project_1.h memory.h data.h cbuffer.h
+cfiles := main.c project_1.c memory.c data.c cbuffer.c
 bfiles := project
 ofiles := $(cfiles:.c=.o)
 ifiles := $(cfiles:.c=.i)
