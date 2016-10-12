@@ -90,7 +90,7 @@ image-dump : $(bfiles)
 test-build : cbuffertest.c cbuffer.c | $(bdir)
 	@echo "building test suite  $(bdir)/test"
 	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/test
-test-run : $(bdir)/test | $(bdir)
+test-run : test-build | $(bdir)
 	@echo "running test suite  $(bdir)/test"
 	./$(bdir)/test
 

@@ -7,6 +7,8 @@ void print_buffer_struct(cbuffer* buff);
 
 void print_buffer_content(cbuffer* buff);
 
+void print_mallinfo();
+
 void test_cbuffer_init(cbuffer* buff, uint8_t size);
 
 void test_cbuffer_free(cbuffer* buff);

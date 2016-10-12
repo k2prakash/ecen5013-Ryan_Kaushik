@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <malloc.h>
 #include "../include/cbuffer.h"
 #include "../include/cbuffertest.h"
 
@@ -17,6 +18,7 @@ int main()
 
 void run_test_cbuffer()
 {
+	print_mallinfo();
     cbuffer buff1, buff2, buff3, buff4, buff5;
     test_cbuffer_init(&buff1,(uint8_t)0);
     test_cbuffer_init(&buff2,(uint8_t)1);
@@ -31,11 +33,13 @@ void run_test_cbuffer()
     test_cbuffer_remove(&buff3,0);
     test_cbuffer_add(&buff3,14);
     test_cbuffer_remove(&buff3,15);
+    print_mallinfo();
     test_cbuffer_free(&buff1);
     test_cbuffer_free(&buff2);
     test_cbuffer_free(&buff3);
 	test_cbuffer_free(&buff4);
 	test_cbuffer_free(&buff5);
+	print_mallinfo();
 	uint8_t pass_sum = init_test_count + add_test_count + remove_test_count + free_test_count;
 	printf("CB UNIT TEST SUITE: (%d/%d) PASS\n",pass_sum,test_count);
 }
@@ -153,4 +157,20 @@ void print_buffer_content(cbuffer* buff)
     for(int i = 0; buff->start + i <= buff->end; i++)
         printf("%c",*(buff->start + i));
     printf("\n");
+}
+
+
+void print_mallinfo()
+{
+	struct mallinfo mallinf = mallinfo();
+	printf("arena   :%d\n", mallinf.arena);
+	printf("ordblks :%d\n", mallinf.ordblks);
+	printf("smblks  :%d\n", mallinf.smblks);
+	printf("hblks   :%d\n", mallinf.hblks);
+	printf("hblkhd  :%d\n", mallinf.hblkhd);
+	printf("usmblks :%d\n", mallinf.usmblks);
+	printf("fsmblks :%d\n", mallinf.fsmblks);
+	printf("uordblks:%d\n", mallinf.uordblks);
+	printf("fordblks:%d\n", mallinf.fordblks);
+	printf("keepcost:%d\n", mallinf.keepcost);
 }
