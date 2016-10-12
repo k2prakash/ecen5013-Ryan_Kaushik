@@ -1,6 +1,13 @@
+/*
+ * memory.c
+ *
+ *  Created on: Oct 8, 2016
+ *      Author: kprakash
+ */
+
 #include <stdio.h>
-#include <stdint.h>
-#include "../include/memory.h"
+#include "stdint.h"
+#include "memory.h"
 
 #ifdef FRDM
 #define printf(...)
@@ -29,7 +36,7 @@ int8_t my_memmove(uint8_t* src , uint8_t* dst , uint32_t length)
             *dst++ = *src++;
         }
     }
-    
+
     return SUCCESS;
 }
 
@@ -47,7 +54,7 @@ int8_t my_memzero(uint8_t* src, uint32_t length)
     {
         *tmp = 0;
     }
-    
+
     return SUCCESS;
 }
 
@@ -68,7 +75,8 @@ int8_t my_reverse(uint8_t* src, uint32_t length)
         *end = *src;
         *src++ = tmp;
     }
-    
+
     return SUCCESS;
 }
+
 

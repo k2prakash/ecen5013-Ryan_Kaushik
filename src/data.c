@@ -1,14 +1,22 @@
+/*
+ * data.c
+ *
+ *  Created on: Oct 8, 2016
+ *      Author: kprakash
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include "../include/data.h"
-#include "../include/memory.h"
+#include "stdint.h"
+#include "data.h"
+#include "memory.h"
+
 
 #ifdef FRDM
 #define printf(...)
 #endif
 
-/*This fucnction will return the number of characters needed to form the ascii string*/
+/*This function will return the number of characters needed to form the ascii string*/
 uint32_t number_of_bytes(uint32_t data, int32_t base) {
     uint32_t  count = 1;
     while((data/base) > 0) {
@@ -21,10 +29,10 @@ uint32_t number_of_bytes(uint32_t data, int32_t base) {
 
 /*
 * This function takes an integer value and converts it into an ascii equivalent value.
-* When the numbebr is negative the funtion will be converted to its 2's complement or
+* When the number is negative the function will be converted to its 2's complement or
 * the uint32_t equivalent, which will be a very large number. If the number is positive
-* the value remains unchanged. The value is then fed to a function that determines the 
-* number of ascii characters required to build the string.Next the conversion from 
+* the value remains unchanged. The value is then fed to a function that determines the
+* number of ascii characters required to build the string.Next the conversion from
 * integer to ascii takes place by means of repeated division and obtaining the remainder
 */
 uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base){
@@ -35,11 +43,11 @@ uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base){
 
     *(str + num) = '\0'; // populate the last character in the string as a null character
     while (val != 0) { //  Perform repeated division of value with the base, till value becomes 0
-	*(str+(num-1)) = ( (base == 16) && ((val % base) > 9) ) ?  //  if the base is 16 or HEX,  and the 
-		 (((val % base) -10) + 'A') : ((val % base) + '0'); // remainder is greater than 9, use A-F. 
+	*(str+(num-1)) = ( (base == 16) && ((val % base) > 9) ) ?  //  if the base is 16 or HEX,  and the
+		 (((val % base) -10) + 'A') : ((val % base) + '0'); // remainder is greater than 9, use A-F.
 			// store the value in the index pointed out by str+ (num -1). This way we are building
 			// the value backwards.
-        num--; // keep decrementing num. 
+        num--; // keep decrementing num.
         val = val/base; // divide value with the base
     }
     return str;
@@ -48,7 +56,7 @@ uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base){
 
 /*
 * This funtion takes an ascii string and converts it into an equivalent 32bit integer value.
-* This fucntion will strip of any leading occurances of blank space, till the first occurance 
+* This fucntion will strip of any leading occurances of blank space, till the first occurance
 * of a valid character: -,+ 0-9 is encountered. Any other character will be stop the atoi conversion
 * at that point and will provide an integer output of the string.
 */
@@ -123,7 +131,7 @@ int32_t big_to_little( int32_t data )
     uint32_t length = sizeof( int32_t );
     my_reverse( src , length);
     /*int32_t val = *( ptr + 3 ) + ( *( ptr + 2 ) << 8 ) + ( *( ptr + 1 ) << 16 ) + ( *( ptr ) << 24 );*/
-    return data; 
+    return data;
 }
 
 
@@ -136,3 +144,5 @@ int32_t little_to_big(int32_t data)
     /*val =  (*(ptr)<<24) + (*(ptr+1)<<16) + (*(ptr+2)<<8) + *(ptr+3);*/
     return data;
 }
+
+
