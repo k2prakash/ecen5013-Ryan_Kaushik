@@ -3,14 +3,16 @@
 
 void run_test_cbuffer();
 
-void printbuffer();
+void print_buffer_struct(cbuffer* buff);
 
-uint8_t test_cbuffer_init();
+void print_buffer_content(cbuffer* buff);
 
-uint8_t test_cbuffer_free();
+void test_cbuffer_init(cbuffer* buff, uint8_t size);
 
-uint8_t test_cbuffer_add();
+void test_cbuffer_free(cbuffer* buff);
 
-uint8_t test_cbuffer_remove();
+void test_cbuffer_add(cbuffer* buff, uint8_t amt);
+
+void test_cbuffer_remove(cbuffer* buff, uint8_t amt);
 
 #endif

@@ -79,7 +79,7 @@ upload :  $(bfiles)
 	@echo "scp into $(BBB_IP)";
 	scp -r $(bdir) $(BBB_USER_NAME)@$(BBB_IP):$(BBB_OUTPUT_PATH)
 image-run : $(bfiles)
-	@echo "running image file $(bpaths)"
+	@echo "running image file $(bpaths)/$(bfiles)"
 	@./$(bpaths)
 image-size : $(bfiles)
 	@echo "sizing image file $(bpaths)"
@@ -87,6 +87,10 @@ image-size : $(bfiles)
 image-dump : $(bfiles)
 	@echo "objdump of image file $(bpaths)"
 	@objdump $(DFLAGS) $(bpaths)
+test : cbuffertest.c cbuffer.c | $(bdir)
+	@echo "running test suite $(bpaths)/test"
+	@$(CC) $^ $(CSTD) -o $(bdir)/test
+	@./$(bdir)/test
 
 
 #CLEANING TARGETS
