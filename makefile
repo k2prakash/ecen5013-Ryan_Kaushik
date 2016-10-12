@@ -28,7 +28,7 @@ include sources.mk
 
 
 #DEFAULT GOAL (just build an image for the specific target)
-all: preprocess asm-file compile-all build-lib build image-size image-dump
+all: preprocess asm-file compile-all build-lib build image-size image-dump test-run
 
 
 #PHONY TARGETS (also list here are dependencies of these targets)
@@ -87,10 +87,12 @@ image-size : $(bfiles)
 image-dump : $(bfiles)
 	@echo "objdump of image file $(bpaths)"
 	@objdump $(DFLAGS) $(bpaths)
-test : cbuffertest.c cbuffer.c | $(bdir)
-	@echo "running test suite $(bpaths)/test"
-	@$(CC) $^ $(CSTD) -o $(bdir)/test
-	@./$(bdir)/test
+test-build : cbuffertest.c cbuffer.c | $(bdir)
+	@echo "building test suite  $(bdir)/test"
+	$(CC) $^ $(CSTD) $(frdmflag) $(CFLAGS) -o $(bdir)/test
+test-run : $(bdir)/test | $(bdir)
+	@echo "running test suite  $(bdir)/test"
+	./$(bdir)/test
 
 
 #CLEANING TARGETS

@@ -21,9 +21,7 @@ void cbuffer_init(cbuffer* buff, uint8_t size)
 
 void cbuffer_free(cbuffer* buff)
 {
-    for(  ; --buff->size > 0;  )
-        free(buff->start++);
-    free(buff);
+    free(buff->start);
     return;
 }
 
