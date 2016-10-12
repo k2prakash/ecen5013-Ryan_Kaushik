@@ -1,14 +1,5 @@
-/*
- * data.h
- *
- *  Created on: Oct 8, 2016
- *      Author: kprakash
- */
-
-#ifndef INCLUDES_DATA_H_
-#define INCLUDES_DATA_H_
-
-uint32_t number_of_bytes(uint32_t data, int32_t base);
+#ifndef _DATA_H
+#define _DATA_H
 
 uint8_t * my_itoa(uint8_t * str, int32_t data, int32_t base);
 
@@ -20,4 +11,4 @@ int32_t big_to_little(int32_t data);
 
 int32_t little_to_big(int32_t data);
 
-#endif /* INCLUDES_DATA_H_ */
+#endif
